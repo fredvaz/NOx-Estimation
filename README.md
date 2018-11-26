@@ -1,1 +1,1 @@
-# Estimation of NOx in an oil refinery using Neural Networks
+# Estimation of NOx using Neural Networks
