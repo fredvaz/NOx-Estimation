@@ -4,8 +4,8 @@
 ## Requirements
 
 - git
-- MATLAB
-- SIMULINK
+- [MATLAB](https://www.mathworks.com/products/matlab.html)
+- [Simulink](https://www.mathworks.com/products/simulink.html)
 
 ## License
 
