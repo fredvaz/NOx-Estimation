@@ -22,7 +22,7 @@ def gen():
 
 
 # Load and prepare the dataset
-dataset = numpy.loadtxt("../data/tpcda19_02_dataset.csv", delimiter=",")
+dataset = numpy.loadtxt("../../data/tpcda19_02_dataset.csv", delimiter=",")
 
 # Synthesis of the information contained in variables u6 and u7
 dataset[:,5] = 0.4878*dataset[:,5] + 0.5261*dataset[:,6]
@@ -42,10 +42,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25);
 numpy.random.seed(5)
 
 
+# SET: 3 x 3 x 11 x 11 = 1089
+
 # Define the way to set the initial random weights and bias
-w_b_init = ['random_normal','random_uniform']
+w_b_init = ['lecun_uniform', 'lecun_normal', 'glorot_normal']
 # Node activation function
-f_acti = ['sigmoid', 'elu', 'relu']
+f_acti = ['softmax', 'elu', 'selu', 'softplus', 'softsign', 'relu', 'tanh',
+          'sigmoid', 'hard_sigmoid', 'exponential', 'linear']
 
 
 # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
@@ -127,7 +130,7 @@ for k in range(10):
 print table
 print "\n ------ Save TOP 10 --------"
 data = x.get_string()
-with open('../data/TOP10_TABLE.txt', 'wb') as f:
+with open('../../data/TOP10_TABLE.txt', 'wb') as f:
   f.write(data)
 
 print "\n---- Save Plot TOP 10 ------"
@@ -144,7 +147,7 @@ for k in range(10):
   # # Set x logaritmic
   # ax.set_yscale('log')
   #plt.show()
-  plt.savefig(['../imgs/TOP'], k, ['.png'])
+  plt.savefig(['../../imgs/TOP'], k, ['.png'])
 
 
 #if __name__ == "__main__":
