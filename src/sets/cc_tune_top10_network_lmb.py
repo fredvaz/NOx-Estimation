@@ -41,13 +41,13 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25);
 # Fix random seed for reproducibility
 numpy.random.seed(5)
 
+
 # SET: 3 x 3 x 11 x 11 = 1089
 
 # Define the way to set the initial random weights and bias
-w_b_init = ['normal', 'zeros', 'ones']
+w_b_init = ['lecun_uniform', 'lecun_normal', 'glorot_normal']
 # Node activation function
-f_acti = ['softmax', 'elu', 'selu', 'softplus', 'softsign', 'relu', 'tanh',
-          'sigmoid', 'hard_sigmoid', 'exponential', 'linear']
+f_acti = ['tanh', 'sigmoid', 'hard_sigmoid']
 
 
 # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]

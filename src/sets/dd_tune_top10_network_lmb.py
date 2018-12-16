@@ -45,10 +45,9 @@ numpy.random.seed(5)
 # SET: 3 x 3 x 11 x 11 = 1089
 
 # Define the way to set the initial random weights and bias
-w_b_init = ['random_normal','random_uniform','truncated_normal']
+w_b_init = ['glorot_uniform', 'he_normal', 'he_uniform']
 # Node activation function
-f_acti = ['softmax', 'elu', 'selu', 'softplus', 'softsign', 'relu', 'tanh',
-          'sigmoid', 'hard_sigmoid', 'exponential', 'linear']
+f_acti = ['exponential', 'linear']
 
 
 # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
