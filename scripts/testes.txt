@@ -1,0 +1,15 @@
+
+## Testes
+
+1º - Testar o tipo de pesos w e b e funções de activação p/12 neuronios da Hidden Layer
+   - Variar w,b e f activação
+   - p/ entrada, p/ hidden layer, p/ saída
+   - Encontrar o TOP 10
+   - Medir tempo
+
+2º - Testar com de 0 a 20 Neurónios p/ p TOP 10
+
+
+
+EXTRA:
+3º - Aumentar o nº de Hidden layers
