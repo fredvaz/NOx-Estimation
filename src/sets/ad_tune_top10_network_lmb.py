@@ -128,7 +128,7 @@ for k in range(10):
 print table
 print "\n ------ Save TOP 10 --------"
 data = x.get_string()
-with open('../../data/TOP10_TABLE.txt', 'wb') as f:
+with open('../../data/TOP10_TABLE_ad.txt', 'wb') as f:
   f.write(data)
 
 print "\n---- Save Plot TOP 10 ------"
@@ -145,7 +145,7 @@ for k in range(10):
   # # Set x logaritmic
   # ax.set_yscale('log')
   #plt.show()
-  plt.savefig(['../../imgs/TOP'], k, ['.png'])
+  plt.savefig(['../../imgs/TOP'], k, ['_ad.png'])
 
 
 #if __name__ == "__main__":
