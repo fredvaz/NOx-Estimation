@@ -39,14 +39,14 @@ def build_network(hidden_layer_nodes, f1, f2, w1, b1, w2, b2):
 
   #Input Variables: Input Layer, Hidden Layer
   model.add(Dense(hidden_layer_nodes, input_dim=5,
-  kernel_initializer=w1, bias_initializer=b1, activation=f1 ))
+  activation=f1, kernel_initializer=w1, bias_initializer=b1, use_bias=True ))
 
   # Output layer: Output Variable
   model.add(Dense(1,
-  kernel_initializer=w2, bias_initializer=b2, activation=f2 ))
+  activation=f2, kernel_initializer=w2, bias_initializer=b2, use_bias=True ))
 
   # Configures the model for a mean squared error regression problem
-  model.compile(loss='mean_squared_error', optimizer='rmsprop') #adam
+  model.compile(loss='mean_squared_error', optimizer='adam') #adam rmsprop
 
   return model
 
@@ -61,6 +61,7 @@ def train_network(model, X_train, y_train):
 def evaluate_network(model, X_test, y_test):
   # Evaluate the model: Mean Squared Error (MSE)
   score = model.evaluate(X_test, y_test, batch_size=10)
+  print 'MSE: ' + str(score)
   return score
 
 # Find Top 10 Score
@@ -97,8 +98,9 @@ def find_top10config(score, top10, f_acti, w_init, b_init):
 def save_top10(table):
   print "\nSaving TOP 10 table..."
   data = table.get_string()
-  with open('../../data/TOP10_TABLE_ab.txt', 'wb') as f:
+  with open('../data/TOP10_TABLE.txt', 'wb') as f:
     f.write(data)
+  print table
 
 # Save TOP10 plots on a .png file
 def save_top10plot(history, _index):
@@ -116,7 +118,7 @@ def save_top10plot(history, _index):
     # # Set x logaritmic
     # ax.set_yscale('log')
     #plt.show()
-    plt.savefig('../../imgs/ab/TOP'+str(k)+'_ab.png')
+    plt.savefig('../imgs/ab/TOP'+str(k)+'_ab.png')
 
 
 # --------------------------------- MAIN ---------------------------------------
@@ -135,20 +137,20 @@ def main():
   # Define the way to set the initial random weights and bias
 
   # Hidden node activation function
-  f_acti = ['sigmoid', 'elu', 'relu']
+  f_acti = ['sigmoid', 'tanh', 'exponential', 'softplus'] #relu
   # Output node activation function
   f2 = 'linear'
   # Initial weights
-  w_init = ['random_normal','random_uniform']
+  w_init = ['ones','random_normal','random_uniform'] # normal
   # Initial bias
-  b_init = ['random_normal','random_uniform']
+  b_init = ['zeros','random_normal','random_uniform']
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  hidden_layer_nodes = 12
+  hidden_layer_nodes = 20 #12-20
 
   train_history = []
   net_score = []
-  i=1.0
+  i=1
   # Analyses MSE for 6^(possible) config's of networks
   for f1 in f_acti:
     for w1 in w_init:
@@ -157,7 +159,8 @@ def main():
           for b2 in b_init:
 
             model = build_network(hidden_layer_nodes, f1, f2, w1, b1, w2, b2)
-            train_history.append(train_network(model, X_train, y_train))
+            #train_history.append(train_network(model, X_train, y_train))
+            train_network(model, X_train, y_train)
             net_score.append(evaluate_network(model, X_test, y_test))
 
             # Debug
@@ -170,7 +173,7 @@ def main():
   top10, _index = find_top10score(net_score)
   table = find_top10config(net_score, top10, f_acti, w_init, b_init)
   save_top10(table)
-  save_top10plot(history, _index)
+  #save_top10plot(history, _index)
 
 
 if __name__== "__main__":
