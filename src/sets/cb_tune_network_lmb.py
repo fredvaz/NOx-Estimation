@@ -45,9 +45,9 @@ numpy.random.seed(5)
 # SET: 3 x 3 x 11 x 11 = 1089
 
 # Define the way to set the initial random weights and bias
-w_b_init = ['random_normal','random_uniform','truncated_normal']
+w_b_init = ['lecun_uniform', 'lecun_normal', 'glorot_normal']
 # Node activation function
-f_acti = ['tanh', 'sigmoid', 'hard_sigmoid']
+f_acti = ['softplus', 'softsign', 'relu']
 
 
 # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
@@ -73,23 +73,13 @@ for w1 in w_b_init:
             model.add(Dense(1,
                             kernel_initializer=w2, bias_initializer=b2, activation=f2 ))
 
-
             # Configures the model for a mean squared error regression problem
             model.compile(loss='mean_squared_error', optimizer='rmsprop') #adam
 
-
             # Trains the model for a given number of epochs (iterations on a dataset)
-            # Calculate the MSE for the training and test datasets generated
-            # validation_data evaluate the loss and any model metrics at the end of each epoch
-            # validation_data=(X_test, y_test)
             history.append(model.fit(X_train, y_train, validation_split=0.33,
                                 epochs=150, batch_size=10, shuffle=True, verbose=0))
-            # history.append(model.fit_generator(generator=gen(), steps_per_epoch=20,
-            #                                    epochs=150, use_multiprocessing=True,
-            #                                    workers=10, verbose=0))
-            #                                    # shuffle=True,
-            #                                    #workers=3, use_multiprocessing=True
-
+            
             # Evaluate the model: Mean Squared Error (MSE)
             score.append(model.evaluate(X_test, y_test, batch_size=10))
 
@@ -129,7 +119,7 @@ for k in range(10):
 print table
 print "\n ------ Save TOP 10 --------"
 data = x.get_string()
-with open('../../data/TOP10_TABLE.txt', 'wb') as f:
+with open('../../data/TOP10_TABLE_cb.txt', 'wb') as f:
   f.write(data)
 
 print "\n---- Save Plot TOP 10 ------"
@@ -146,7 +136,7 @@ for k in range(10):
   # # Set x logaritmic
   # ax.set_yscale('log')
   #plt.show()
-  plt.savefig(['../../imgs/TOP'], k, ['.png'])
+  plt.savefig(['../../imgs/TOP'], k, ['_cb.png'])
 
 
 #if __name__ == "__main__":
