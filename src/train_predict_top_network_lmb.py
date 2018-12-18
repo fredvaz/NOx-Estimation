@@ -63,6 +63,9 @@ model.add(Dense(1,
 # Configures the model for a mean squared error regression problem
 model.compile(loss='mean_squared_error', optimizer='rmsprop') #adam
 
+# Model summary
+#print(model.summary())
+#print(model.layers())
 
 # Trains the model for a given number of epochs (iterations on a dataset)
 history = model.fit(X_train, y_train, validation_split=0.33,
@@ -79,6 +82,8 @@ print "\n---- Desired vs Predections ----"
 
 # calculate predictions
 y_predictions = model.predict(X_test)
+
+#accuracy = numpy.mean(predictions == Y)
 
 # Plot desired values vs predictions
 plt.plot(y_test)

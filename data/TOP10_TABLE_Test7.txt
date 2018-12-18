@@ -1,0 +1,28 @@
++-----+------+--------------+--------------+----------------+----------------------+
+| Top |  u1  |      w1      |      w2      |       b        |         MSE          |
++-----+------+--------------+--------------+----------------+----------------------+
+|  1  | relu |  he_uniform  |    zeros     | random_uniform | 0.010895349127663807 |
+|  2  | relu | lecun_normal | lecun_normal |     zeros      | 0.010935938239774921 |
+|  3  | relu | lecun_normal | lecun_normal | random_normal  | 0.011207450816238468 |
+|  4  | relu | lecun_normal | lecun_normal | random_uniform | 0.011309045620939949 |
+|  5  | relu |  he_uniform  |    zeros     | random_normal  | 0.011607776417142966 |
+|  6  | relu |  he_uniform  | lecun_normal | random_uniform | 0.011950529497963462 |
+|  7  | selu | lecun_normal | lecun_normal | random_uniform | 0.011975717561488802 |
+|  8  | relu | lecun_normal |    zeros     | random_normal  | 0.01200134136756374  |
+|  9  | relu | lecun_normal |    zeros     | random_uniform | 0.012024286605248397 |
+|  10 | relu |  he_uniform  |  he_uniform  | random_normal  | 0.012089094845578074 |
++-----+------+--------------+--------------+----------------+----------------------+
+ 
+  # terminal da direita inferior
+  
+  # Hidden node activation function
+  u_acti = ['relu','selu'] 
+
+  # Output node activation function
+  u2 = 'relu' # better: relu > linear > selu > elu
+
+  # Initial weights
+  w_init = ['zeros','lecun_normal','he_uniform']
+
+  # Initial bias
+  b_init = ['zeros','random_uniform','random_normal']

@@ -1,0 +1,27 @@
++-----+------+---------------+----------------+------------------+----------------------+
+| Top |  u1  |       w1      |       w2       |        b         |         MSE          |
++-----+------+---------------+----------------+------------------+----------------------+
+|  1  | relu | lecun_uniform | lecun_uniform  | truncated_normal | 0.00886103782845153  |
+|  2  | relu | lecun_uniform | lecun_uniform  | truncated_normal | 0.00907409980639138  |
+|  3  | relu | lecun_uniform | random_uniform | truncated_normal | 0.009405965996186504 |
+|  4  | relu | lecun_uniform | lecun_uniform  |       ones       | 0.00960907925301316  |
+|  5  | relu | lecun_uniform | random_uniform | truncated_normal | 0.009750317115421321 |
+|  6  | relu | lecun_uniform | lecun_uniform  | truncated_normal | 0.00996088420718231  |
+|  7  | relu | lecun_uniform | lecun_uniform  | VarianceScaling  | 0.009961412669244137 |
+|  8  | relu | lecun_uniform | lecun_uniform  |       ones       | 0.010075070704756812 |
+|  9  | selu | lecun_uniform | random_uniform | truncated_normal | 0.010145203908905387 |
+|  10 | selu | lecun_uniform | random_uniform | truncated_normal | 0.010279176608574662 |
++-----+------+---------------+----------------+------------------+----------------------+
+  
+ 
+  # Hidden node activation function
+  u_acti = ['relu','selu'] 
+
+  # Output node activation function
+  u2 = 'relu' # better: relu > linear > selu > elu
+
+  # Initial weights
+  w_init = ['lecun_uniform','lecun_uniform','random_uniform']
+
+  # Initial bias
+  b_init = ['ones','truncated_normal','VarianceScaling']

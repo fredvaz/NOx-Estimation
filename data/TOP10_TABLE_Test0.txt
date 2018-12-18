@@ -1,0 +1,38 @@
++-----+------+------+----------------+----------------+----------------+----------------------+
+| Top |  w1  |  b1  |       w2       |       b2       |       f1       |         MSE          |
++-----+------+------+----------------+----------------+----------------+----------------------+
+|  1  | tanh | ones | random_normal  | random_normal  |     zeros      | 0.01204960422844372  |
+|  2  | tanh | ones | random_uniform | random_normal  |     zeros      | 0.012056203990836034 |
+|  3  | tanh | ones | random_normal  | random_normal  | random_uniform | 0.012056238729168068 |
+|  4  | tanh | ones |     zeros      | random_normal  |     zeros      | 0.012070200812410224 |
+|  5  | tanh | ones | random_uniform | random_uniform |     zeros      | 0.012071597195145759 |
+|  6  | tanh | ones |     zeros      | random_normal  | random_uniform | 0.012074029162018137 |
+|  7  | tanh | ones |     zeros      | random_uniform |     zeros      | 0.012079846812412143 |
+|  8  | tanh | ones | random_uniform | random_normal  | random_normal  | 0.012084271064536137 |
+|  9  | tanh | ones |     zeros      | random_normal  | random_normal  | 0.01209051279689778  |
+|  10 | tanh | ones |     zeros      | random_uniform | random_uniform | 0.01209387187846005  |
++-----+------+------+----------------+----------------+----------------+----------------------+
+
+
+  # Hidden node activation function
+  f_acti = ['sigmoid', 'tanh', 'exponential', 'softplus'] #relu
+  # Output node activation function
+  f2 = 'linear'
+  # Initial weights
+  w_init = ['ones','random_normal','random_uniform'] # normal
+  # Initial bias
+  b_init = ['zeros','random_normal','random_uniform']
+
+
+  # Activation Functions
+  # softmax - softmax activation function: exp(z)/sum(exp(z))
+  # softplus - softplus activation function: log(exp(x) + 1)
+  # softsign - softsign activation function: x / (abs(x) + 1)
+  # tanh - hyperbolic tangent activation function: tanh(x)
+  # sigmoid - sigmoid activation function: 1 / (1 + exp(-x))
+  # hard_sigmoid - hard sigmoid activation function: max(0, min(1, (x + 1)/2))
+  # exponential - exponential (base e) activation function: exp(x)
+  # elu - exponential linear unit
+  # selu - scaled Exponential Linear Unit (SELU)
+  # relu - rectified Linear Unit
+  # linear - linear (i.e. identity) activation function

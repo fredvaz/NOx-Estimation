@@ -1,0 +1,31 @@
++-----+----------+----------------+----------------+----------------+----------------------+
+| Top |    u1    |       w1       |       w2       |       b        |         MSE          |
++-----+----------+----------------+----------------+----------------+----------------------+
+|  1  |   relu   | random_uniform | random_uniform |     zeros      | 0.008515172934328968 |
+|  2  |   relu   | random_uniform |      ones      |     zeros      | 0.008541121549735015 |
+|  3  |   relu   | random_uniform |      ones      | random_uniform | 0.008638473037122325 |
+|  4  |   selu   | random_uniform | random_uniform |     zeros      | 0.009371435968205333 |
+|  5  | softsign | random_uniform |      ones      |     zeros      | 0.009620461782271212 |
+|  6  | softsign | random_uniform |      ones      | random_uniform | 0.009666024305095727 |
+|  7  |   relu   | random_uniform | random_uniform | random_uniform | 0.009701833128929138 |
+|  8  | softsign |      ones      | random_uniform |     zeros      | 0.009728246347301385 |
+|  9  | softmax  |      ones      |      ones      | random_uniform | 0.009775619572875175 |
+|  10 | softmax  | random_uniform |      ones      | random_uniform | 0.009779510342262009 |
++-----+----------+----------------+----------------+----------------+----------------------+
+
+  # u activation Test	
+
+  # Hidden node activation function
+  u_acti = ['relu','elu','selu','softmax','softplus','softsign'] 
+
+  # Output node activation function
+  u2 = 'relu' # better: relu > linear > selu > elu
+
+  # Initial weights
+  w_init = ['ones','random_uniform']
+
+  # Initial bias
+  b_init = ['zeros','random_uniform']
+
+
+

@@ -1,14 +1,4 @@
-+-----+------+----------------+----------------+----------------+----------------+----------------------+
-| Top |  w1  |       b1       |       w2       |       b2       |       f1       |         MSE          |
-+-----+------+----------------+----------------+----------------+----------------+----------------------+
-|  1  | relu | random_normal  | random_normal  | random_uniform | random_uniform | 0.010102422708984126 |
-|  2  | relu | random_uniform | random_normal  | random_uniform | random_uniform | 0.01028173673813316  |
-|  3  | relu | random_normal  | random_normal  | random_uniform | random_normal  | 0.010399435727264393 |
-|  4  | relu | random_uniform | random_uniform | random_uniform | random_uniform | 0.010559888641265306 |
-|  5  | relu | random_uniform | random_uniform | random_normal  | random_normal  | 0.010667223686521704 |
-|  6  | relu | random_uniform | random_uniform | random_uniform | random_normal  | 0.01074614177288657  |
-|  7  | relu | random_normal  | random_normal  | random_normal  | random_normal  | 0.010993824721398678 |
-|  8  | relu | random_uniform | random_uniform | random_normal  | random_uniform | 0.011232351291586052 |
-|  9  | relu | random_normal  | random_normal  | random_normal  | random_uniform | 0.01126223849979314  |
-|  10 | relu | random_uniform | random_normal  | random_normal  | random_uniform | 0.011276892610740932 |
-+-----+------+----------------+----------------+----------------+----------------+----------------------+
++-----+----+----+----+---+-----+
+| Top | u1 | w1 | w2 | b | MSE |
++-----+----+----+----+---+-----+
++-----+----+----+----+---+-----+
