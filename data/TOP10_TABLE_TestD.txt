@@ -1,0 +1,67 @@
++-----+------------+-----------------+------------------+----------------+----------------------+
+| Top |     u1     |        w1       |        w2        |       b        |         MSE          |
++-----+------------+-----------------+------------------+----------------+----------------------+
+|  1  |    relu    |  lecun_uniform  | VarianceScaling  |     zeros      | 0.007934696989303285 |
+|  2  |    relu    |  lecun_uniform  | VarianceScaling  | random_normal  | 0.008243559656495397 |
+|  3  |    relu    | VarianceScaling | VarianceScaling  | random_uniform | 0.008270343460819937 |
+|  4  |    relu    | VarianceScaling |  lecun_uniform   | random_normal  | 0.00831571551547809  |
+|  5  |    relu    |  lecun_uniform  | VarianceScaling  | random_uniform | 0.008343231424011967 |
+|  6  | leaky_relu |  lecun_uniform  |  lecun_uniform   | random_normal  | 0.008348252658139576 |
+|  7  |    relu    | VarianceScaling | truncated_normal | random_uniform | 0.00842739145525477  |
+|  8  | leaky_relu |  lecun_uniform  |  lecun_uniform   |     zeros      | 0.00853650520809672  |
+|  9  |    relu    | VarianceScaling |  lecun_uniform   |     zeros      | 0.008545342172411355 |
+|  10 | leaky_relu | VarianceScaling | VarianceScaling  | random_normal  | 0.008597934415394609 |
++-----+------------+-----------------+------------------+----------------+----------------------+
+ 
+  # optimizer='rmsprop'
+
+  # TESTING: 3u1 x 1xu2 x 3w1 x 3w2 x 3b = 81 Networks
+  # Hidden node activation function
+  u_acti = ['tanh','relu','leaky_relu']
+  # Output node activation function
+  u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
+  # Initial weights - TOP sets (Test4)
+  w_init = ['truncated_normal','VarianceScaling','lecun_uniform']
+  # Initial bias - TOP sets (Test4)
+  b_init = ['zeros','random_uniform','random_normal']
+
+  # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
+  #hidden_nodes = range(1,21) #0-20
+  nodes = 20
+  epochs = 150 # 1000 epochs Matlab default != iterations
+
+
+  # optimizer='rmsprop'
+  # p/ epochs = 1000
++-----+------------+------------------+------------------+----------------+-----------------------+
+| Top |     u1     |        w1        |        w2        |       b        |          MSE          |
++-----+------------+------------------+------------------+----------------+-----------------------+
+|  1  | leaky_relu | VarianceScaling  | truncated_normal | random_uniform |  0.007176422006027265 |
+|  2  | leaky_relu | truncated_normal | truncated_normal |     zeros      |  0.007245711033994501 |
+|  3  | leaky_relu |  lecun_uniform   | VarianceScaling  |     zeros      |  0.007428485375236381 |
+|  4  | leaky_relu |  lecun_uniform   | truncated_normal | random_normal  |  0.00753050876612013  |
+|  5  | leaky_relu |  lecun_uniform   | VarianceScaling  | random_uniform |  0.007570145854895765 |
+|  6  | leaky_relu | VarianceScaling  |  lecun_uniform   |     zeros      |  0.007787525552240285 |
+|  7  |    relu    |  lecun_uniform   |  lecun_uniform   | random_normal  | 0.0078014139086008075 |
+|  8  |    relu    | VarianceScaling  | truncated_normal | random_normal  |  0.007818618332120506 |
+|  9  | leaky_relu | truncated_normal |  lecun_uniform   | random_normal  |  0.007840594022788784 |
+|  10 | leaky_relu | VarianceScaling  | VarianceScaling  | random_normal  |  0.007866885140538215 |
++-----+------------+------------------+------------------+----------------+-----------------------+
+
+  # optimizer='adam'
+  # p/ epochs = 1000
++-----+------------+-----------------+------------------+----------------+----------------------+
+| Top |     u1     |        w1       |        w2        |       b        |         MSE          |
++-----+------------+-----------------+------------------+----------------+----------------------+
+|  1  |    relu    |  lecun_uniform  | VarianceScaling  |     zeros      | 0.007934696989303285 |
+|  2  |    relu    |  lecun_uniform  | VarianceScaling  | random_normal  | 0.008243559656495397 |
+|  3  |    relu    | VarianceScaling | VarianceScaling  | random_uniform | 0.008270343460819937 |
+|  4  |    relu    | VarianceScaling |  lecun_uniform   | random_normal  | 0.00831571551547809  |
+|  5  |    relu    |  lecun_uniform  | VarianceScaling  | random_uniform | 0.008343231424011967 |
+|  6  | leaky_relu |  lecun_uniform  |  lecun_uniform   | random_normal  | 0.008348252658139576 |
+|  7  |    relu    | VarianceScaling | truncated_normal | random_uniform | 0.00842739145525477  |
+|  8  | leaky_relu |  lecun_uniform  |  lecun_uniform   |     zeros      | 0.00853650520809672  |
+|  9  |    relu    | VarianceScaling |  lecun_uniform   |     zeros      | 0.008545342172411355 |
+|  10 | leaky_relu | VarianceScaling | VarianceScaling  | random_normal  | 0.008597934415394609 |
++-----+------------+-----------------+------------------+----------------+----------------------+
+
