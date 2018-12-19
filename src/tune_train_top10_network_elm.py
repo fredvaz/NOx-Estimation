@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import numpy
 from keras import metrics
 from prettytable import PrettyTable
+import time
 
 
 # Prepare data
@@ -214,15 +215,23 @@ def main():
   model = []
   train_history = []
   net_score = []
+  time_elapsed_train = []
+  time_elapsed_test = []
   i=1
   # Analyses MSE for 6^(possible) config's of networks
   for u1 in u_hidd:
     for u2 in u_out:
       for nodes in hidd_nodes:
+
         model.append(build_network(nodes, u1, u2))
         #train_history.append(train_network(model, X_train, y_train))
+        time_start_train = time.clock()
         train_network(model[i-1], X_train, y_train, epochs)
+        time_elapsed_train.append(time.clock() - time_start_train)
+        time_start_test = time.clock()
         net_score.append(evaluate_network(model[i-1], X_test, y_test))
+        time_elapsed_test.append(time.clock() - time_start_test)
+
         # Debug
         print("Model: ", nodes, u1, u2)
         print("Progress: %.2f%%" % (i/float(len(u_hidd)*len(u_out)
@@ -237,6 +246,8 @@ def main():
   table = find_top10config(net_score, top10, hidd_nodes, u_hidd, u_out)
   save_top10(table)
   #save_top10plot(history, _index)
+  print 'Mean Time Train: ', numpy.mean(time_elapsed_train)
+  print 'Mean Time Test: ', numpy.mean(time_elapsed_test)
 
 
 if __name__== "__main__":

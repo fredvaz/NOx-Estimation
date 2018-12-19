@@ -17,6 +17,7 @@ from sklearn.model_selection import train_test_split
 import numpy
 from keras import metrics
 from prettytable import PrettyTable
+import time
 
 
 # Prepare data
@@ -58,7 +59,7 @@ def build_network(hidden_nodes, u1, u2, w1, w2, b):
                     kernel_initializer=w2, bias_initializer=b,
                     use_bias=True ))
     # add an advanced activation
-    model.add(LeakyReLU(alpha=0.00)) # BEST: 0.00
+    model.add(LeakyReLU(alpha=0.01)) # BEST: 0.00
   else:
     model.add(Dense(1,
                     activation=u2, kernel_initializer=w2, bias_initializer=b,
@@ -134,7 +135,7 @@ def main():
   # --------------------------- Paramenters ------------------------------------
 
   # Hidden node activation function
-  u1 = 'relu'
+  u1 = 'leaky_relu'
   # Output node activation function
   u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
   # Initial weights - TOP sets (Test4)
@@ -150,9 +151,13 @@ def main():
   batch = 32 # batch size
 
   model = build_network(nodes, u1, u2, w1, w2, b)
+  time_start_train = time.clock()
   train_history = train_network(model, X_train, y_train, epochs, batch)
+  time_elapsed_train = time.clock() - time_start_train
+  time_start_test = time.clock()
   net_score = evaluate_network(model, X_test, y_test, batch)
-  print(model.summary())
+  time_elapsed_test = time.clock() - time_start_test
+  #print(model.summary())
   #print(model.layers())
 
   # calculate predictions
@@ -162,6 +167,9 @@ def main():
   print '\n\nMSE: ' + str(net_score)
   save_plot_test_predection(y_test, y_predictions)
   save_mse_plot(train_history)
+
+  print 'Train Time: ', time_elapsed_train
+  print 'Test Time: ', time_elapsed_test
 
 
 if __name__== "__main__":

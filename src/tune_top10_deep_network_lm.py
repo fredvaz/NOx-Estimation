@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import numpy
 from keras import metrics
 from prettytable import PrettyTable
+import time
 
 
 # Prepare data
@@ -60,7 +61,7 @@ def build_network(hidden_nodes, deep_layers, u1, u2, w1, w2, b):
       # add an advanced activation
       model.add(LeakyReLU(alpha=0.01)) #BEST: 0.01
     else:
-      model.add(Dense(30,
+      model.add(Dense(2*hidden_nodes,
                       activation='tanh', kernel_initializer=w1, bias_initializer=b,
                       use_bias=True ))
 
@@ -175,6 +176,7 @@ def main():
   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.10)
 
   # Fix random seed for reproducibility
+  seed = 7
   numpy.random.seed(100)
 
   # --------------------------- Paramenters ------------------------------------
@@ -231,7 +233,7 @@ def main():
 
   ######################## TESTE
   # Hidden node activation function
-  u1 = 'relu'
+  u1 = 'leaky_relu'
   # Output node activation function
   u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
   # Initial weights - TOP sets (Test4)
@@ -245,12 +247,13 @@ def main():
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
   hidd_nodes = range(15,21) #0-20
-  nodes = 20
+  nodes = 25
   deep_layers = 5
-  epochs = 500 # 1000 epochs Matlab default != iterations
+  epochs = 1000 # 1000 epochs Matlab default != iterations
   model = []
   train_history = []
   net_score = []
+
   i=1
   # Analyses MSE for 6^(possible) config's of networks
   # for u1 in u_hidd:
@@ -261,9 +264,13 @@ def main():
             #for nodes in hidd_nodes:
 
   model.append(build_network(nodes, deep_layers, u1, u2, w1, w2, b))
+  time_start_train = time.clock()
   train_history = train_network(model[i-1], X_train, y_train, epochs)
   #train_network(model[i-1], X_train, y_train, epochs)
+  time_elapsed_train = time.clock() - time_start_train
+  time_start_test = time.clock()
   net_score.append(evaluate_network(model[i-1], X_test, y_test))
+  time_elapsed_test = time.clock() - time_start_test
 
   # Debug
   print "Model: ", nodes, u1, u2, w1, w2, b
@@ -314,6 +321,9 @@ def main():
   # ax.set_yscale('log')
   plt.show()
   #plt.savefig('../imgs/TOP1_MSE.png')
+
+  print 'Mean Time Train: ', numpy.mean(time_elapsed_train)
+  print 'Mean Time Test: ', numpy.mean(time_elapsed_test)
 
 
 if __name__== "__main__":

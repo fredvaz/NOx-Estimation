@@ -16,6 +16,8 @@ import matplotlib.pyplot as plt
 import numpy
 from keras import metrics
 from prettytable import PrettyTable
+import time
+
 
 
 # Prepare data
@@ -57,7 +59,7 @@ def build_network(hidden_nodes, u1, u2, w1, w2, b):
                     kernel_initializer=w2, bias_initializer=b,
                     use_bias=True ))
     # add an advanced activation
-    model.add(LeakyReLU(alpha=0.00)) # BEST: 0.00
+    model.add(LeakyReLU(alpha=0.01)) # BEST: 0.00
   else:
     model.add(Dense(1,
                     activation=u2, kernel_initializer=w2, bias_initializer=b,
@@ -76,10 +78,10 @@ def train_network(model, X_train, y_train, iter):
   return history
 
 # Evaluate Network Mean Squared Error
-def evaluate_network(model, X_test, y_test):
+def evaluate_network(_str, model, X_test, y_test):
   # Evaluate the model: Mean Squared Error (MSE)
   score = model.evaluate(X_test, y_test, batch_size=32)
-  print 'MSE: ' + str(score)
+  print 'MSE '+_str+': ' + str(score)
   return score
 
 # Find Top 10 Score
@@ -163,7 +165,7 @@ def main():
   # Fix random seed for reproducibility
   numpy.random.seed(100)
 
-  # --------------------------- Paramenters ------------------------------------
+  #--------------------------- Paramenters ------------------------------------
   # Define the way to set the initial random weights and bias
   #
   # zeros - initializer that generates tensors initialized to 0
@@ -204,23 +206,26 @@ def main():
   #
 
   # TESTING: 3u1 x 1xu2 x 3w1 x 3w2 x 3b = 81 Networks
-  #          2u1 x 2xu2 x 3w1 x 3w2 x 3b x nodes = 540 Networks (108 networks)
+  #          2u1 x 1xu2 x 3w1 x 3w2 x 3b x 5nodes = 270 Networks (54 networks)
   # Hidden node activation function
   u_hidd = ['relu','leaky_relu'] # 'tanh'
   # Output node activation function
-  u_out = ['relu','leaky_relu'] # better: leaky_relu > relu > linear > selu > elu
+  u_out = ['relu'] # better: leaky_relu > relu > linear > selu > elu
   # Initial weights - TOP sets (Test4)
   w_init = ['truncated_normal','VarianceScaling','lecun_uniform']
   # Initial bias - TOP sets (Test4)
   b_init = ['zeros','random_uniform','random_normal']
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  hidd_nodes = range(10,15) #0-20, range(15,21), range(10,15)
+  hidd_nodes = range(15,18) #0-20, range(15,21), range(10,15)
   #nodes = 19
   epochs = 1000 # 1000 epochs Matlab default != iterations
   model = []
   train_history = []
-  net_score = []
+  net_score_test = []
+  net_score_train = []
+  time_elapsed_train = []
+  time_elapsed_test = []
   i=1
   # Analyses MSE for 6^(possible) config's of networks
   for u1 in u_hidd:
@@ -231,9 +236,18 @@ def main():
             for nodes in hidd_nodes:
 
               model.append(build_network(nodes, u1, u2, w1, w2, b))
+
+              time_start_train = time.clock()
               #train_history.append(train_network(model, X_train, y_train))
               train_network(model[i-1], X_train, y_train, epochs)
-              net_score.append(evaluate_network(model[i-1], X_test, y_test))
+              time_elapsed_train.append(time.clock() - time_start_train)
+
+              time_start_test = time.clock()
+              net_score_test.append(evaluate_network('Test',model[i-1], X_test, y_test))
+              time_elapsed_test.append(time.clock() - time_start_test)
+
+              net_score_train.append(evaluate_network('Train',model[i-1], X_train, y_train))
+
 
               # Debug
               print "Model: ", nodes, u1, u2, w1, w2, b
@@ -245,11 +259,15 @@ def main():
               i=i+1
 
 
-  top10, _index = find_top10score(net_score)
+  top10, _index = find_top10score(net_score_test)
   save_top10_models(model, _index)
-  table = find_top10config(net_score, top10, hidd_nodes, u_hidd, u_out, w_init, b_init)
+  table = find_top10config(net_score_test, top10, hidd_nodes, u_hidd, u_out, w_init, b_init)
   save_top10(table)
   #save_top10plot(history, _index)
+  print 'TEST MSE MEAN:', numpy.mean(net_score_test)
+  print 'TRAIN MSE MEAN:', numpy.mean(net_score_train)
+  print 'Mean Time Train: ', numpy.mean(time_elapsed_train)
+  print 'Mean Time Teste: ', numpy.mean(time_elapsed_test)
 
 
 if __name__== "__main__":

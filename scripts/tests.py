@@ -70,8 +70,32 @@ from prettytable import PrettyTable
 
 def main():
 
-  for value in range(11):
-    print str(value/10.0*100) + '%'
+  # for value in range(11):
+  #   print str(value/10.0*100) + '%'
+
+  x = numpy.array([[40, 10], [50, 11]])
+
+  print x
+
+  _mean = x.mean(axis=1) # to take the mean of each row
+
+  print _mean
+
+  x.mean(axis=0)     # to take the mean of each col
+
+  y_predictions = numpy.full((3,4),0)
+
+  print y_predictions[0] # print one line
+
+  y_predictions[0] = range(0,4)
+
+  print y_predictions
+
+  y_predictions_mean = y_predictions.mean(axis=0)
+
+  print y_predictions_mean
+
+
 
 # When Python interpreter reads a source file, it will execute all the code found in it
 # When Python runs the "source file" as the main program, it sets the special variable
