@@ -89,7 +89,7 @@ def save_plot_test_predection(y_test, y_predictions):
   # Plot desired values vs predictions
   plt.plot(y_test)
   plt.plot(y_predictions)
-  plt.title('Model loss')
+  plt.title('Desired vs Predection')
   plt.ylabel('y')
   plt.xlabel('X_test')
   plt.legend(['Desired', 'Predections'], loc='upper right')
@@ -97,7 +97,7 @@ def save_plot_test_predection(y_test, y_predictions):
   # Set x logaritmic
   # ax.set_yscale('log')
   plt.show()
-  plt.savefig('../imgs/predictions_top1.png')
+  plt.savefig('../imgs/predictions_TOP1.png')
 
 # Save TOP1 plot on a .png file
 def save_mse_plot(history):
@@ -115,7 +115,7 @@ def save_mse_plot(history):
   # Set x logaritmic
   # ax.set_yscale('log')
   plt.show()
-  plt.savefig('../imgs/ab/TOP1_MSE.png')
+  plt.savefig('../imgs/TOP1_MSE.png')
 
 
 
@@ -145,7 +145,7 @@ def main():
   b = 'random_uniform'  # TOP: random_uniform GOOD: random_uniform
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  nodes = 100
+  nodes = 20
   epochs = 1000 # 1000 epochs Matlab default != iterations
   batch = 32 # batch size
 

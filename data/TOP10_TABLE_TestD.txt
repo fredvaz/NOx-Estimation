@@ -50,18 +50,66 @@
 
   # optimizer='adam'
   # p/ epochs = 1000
-+-----+------------+-----------------+------------------+----------------+----------------------+
-| Top |     u1     |        w1       |        w2        |       b        |         MSE          |
-+-----+------------+-----------------+------------------+----------------+----------------------+
-|  1  |    relu    |  lecun_uniform  | VarianceScaling  |     zeros      | 0.007934696989303285 |
-|  2  |    relu    |  lecun_uniform  | VarianceScaling  | random_normal  | 0.008243559656495397 |
-|  3  |    relu    | VarianceScaling | VarianceScaling  | random_uniform | 0.008270343460819937 |
-|  4  |    relu    | VarianceScaling |  lecun_uniform   | random_normal  | 0.00831571551547809  |
-|  5  |    relu    |  lecun_uniform  | VarianceScaling  | random_uniform | 0.008343231424011967 |
-|  6  | leaky_relu |  lecun_uniform  |  lecun_uniform   | random_normal  | 0.008348252658139576 |
-|  7  |    relu    | VarianceScaling | truncated_normal | random_uniform | 0.00842739145525477  |
-|  8  | leaky_relu |  lecun_uniform  |  lecun_uniform   |     zeros      | 0.00853650520809672  |
-|  9  |    relu    | VarianceScaling |  lecun_uniform   |     zeros      | 0.008545342172411355 |
-|  10 | leaky_relu | VarianceScaling | VarianceScaling  | random_normal  | 0.008597934415394609 |
-+-----+------------+-----------------+------------------+----------------+----------------------+
++-----+------------+-----------------+------------------+----------------+-----------------------+
+| Top |     u1     |        w1       |        w2        |       b        |          MSE          |
++-----+------------+-----------------+------------------+----------------+-----------------------+
+|  1  | leaky_relu | VarianceScaling |  lecun_uniform   | random_normal  |  0.006380135523663326 |
+|  2  |    relu    | VarianceScaling | truncated_normal | random_normal  |  0.006380937663330273 |
+|  3  | leaky_relu | VarianceScaling | VarianceScaling  | random_normal  |  0.006397224192253568 |
+|  4  |    relu    | VarianceScaling | truncated_normal |     zeros      |  0.006474459467625076 |
+|  5  | leaky_relu |  lecun_uniform  | truncated_normal | random_normal  |  0.006543827133083885 |
+|  6  | leaky_relu | VarianceScaling | truncated_normal | random_uniform |   0.0067378440533172  |
+|  7  |    relu    |  lecun_uniform  | truncated_normal | random_uniform |  0.006982989228245887 |
+|  8  |    relu    | VarianceScaling |  lecun_uniform   | random_uniform |  0.007036296794698997 |
+|  9  |    relu    |  lecun_uniform  | truncated_normal |     zeros      | 0.0070744911632077264 |
+|  10 | leaky_relu | VarianceScaling |  lecun_uniform   |     zeros      |  0.007187480733475902 |
++-----+------------+-----------------+------------------+----------------+-----------------------+
+
+
+
+  # optimizer='rmsprop'
+  # p/ epochs = 1000
+  # nodes = 20
++-----+----+------------+------------+------------------+------------------+----------------+-----------------------+
+| Top | 20 |     u1     |     u2     |        w1        |        w2        |       b        |          MSE          |
++-----+----+------------+------------+------------------+------------------+----------------+-----------------------+
+|  1  | 20 | leaky_relu |    relu    |  lecun_uniform   | truncated_normal | random_normal  | 0.0064399140802296724 |
+|  2  | 20 | leaky_relu |    relu    | VarianceScaling  | truncated_normal | random_normal  |  0.006854709644209255 |
+|  3  | 20 | leaky_relu | leaky_relu | truncated_normal | VarianceScaling  |     zeros      |  0.006947059133513407 |
+|  4  | 20 | leaky_relu |    relu    | truncated_normal | truncated_normal | random_normal  |  0.007022267486900091 |
+|  5  | 20 |    relu    |    relu    | VarianceScaling  |  lecun_uniform   |     zeros      |  0.007189346324991096 |
+|  6  | 20 |    relu    | leaky_relu |  lecun_uniform   |  lecun_uniform   | random_uniform |  0.007327225753529505 |
+|  7  | 20 |    relu    |    relu    | truncated_normal | truncated_normal |     zeros      |  0.007360394756225022 |
+|  8  | 20 | leaky_relu | leaky_relu |  lecun_uniform   | VarianceScaling  | random_uniform |  0.007384878405454484 |
+|  9  | 20 | leaky_relu |    relu    | truncated_normal |  lecun_uniform   |     zeros      |  0.007387821274724873 |
+|  10 | 20 | leaky_relu |    relu    |  lecun_uniform   |  lecun_uniform   | random_normal  | 0.0074201554567976434 |
++-----+----+------------+------------+------------------+------------------+----------------+-----------------------+
+
+  # optimizer='rmsprop'
+  # p/ epochs = 1000
+  # nodes = 19
++-----+----+------------+------------+------------------+------------------+----------------+----------------------+
+| Top | 19 |     u1     |     u2     |        w1        |        w2        |       b        |         MSE          |
++-----+----+------------+------------+------------------+------------------+----------------+----------------------+
+|  1  | 19 | leaky_relu | leaky_relu | VarianceScaling  |  lecun_uniform   | random_uniform | 0.006052764327349988 |
+|  2  | 19 | leaky_relu |    relu    | truncated_normal | truncated_normal | random_normal  | 0.006216093245893717 |
+|  3  | 19 | leaky_relu |    relu    | VarianceScaling  | VarianceScaling  | random_normal  | 0.006568581280721859 |
+|  4  | 19 | leaky_relu | leaky_relu | VarianceScaling  |  lecun_uniform   |     zeros      | 0.006663109903985804 |
+|  5  | 19 | leaky_relu | leaky_relu |  lecun_uniform   | VarianceScaling  | random_uniform | 0.006663668612864884 |
+|  6  | 19 |    relu    | leaky_relu |  lecun_uniform   | truncated_normal | random_uniform | 0.006708480290729891 |
+|  7  | 19 | leaky_relu |    relu    | VarianceScaling  | truncated_normal |     zeros      | 0.006719505617564374 |
+|  8  | 19 | leaky_relu |    relu    | VarianceScaling  | truncated_normal | random_normal  | 0.006742577500302683 |
+|  9  | 19 | leaky_relu | leaky_relu | truncated_normal | VarianceScaling  |     zeros      | 0.006758316233754158 |
+|  10 | 19 |    relu    |    relu    | VarianceScaling  | truncated_normal | random_normal  | 0.006779802057214759 |
++-----+----+------------+------------+------------------+------------------+----------------+----------------------+
+
+
+
+
+
+
+
+
+
+
 

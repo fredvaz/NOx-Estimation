@@ -64,8 +64,8 @@ def build_network(hidden_nodes, u1, u2, w1, w2, b):
                     use_bias=True ))
 
   # Configures the model for a mean squared error regression problem
-  model.compile(loss='mean_squared_error', optimizer='adam')
-  # sgd, adam, rmsprop, adadelta
+  model.compile(loss='mean_squared_error', optimizer='rmsprop')
+  # rmsprop > adam > sgd > adadelta
   return model
 
 # Network training
@@ -102,24 +102,26 @@ def save_top10_models(model, _index):
     with open('../models/model_TOP'+str(k+1)+'.json', "w") as json_file:
       json_file.write(model_json)
       # serialize weights to HDF5
-    model[_index[k]].save_weights('../models/model_TOP'+str(k)+'.h5')
+    model[_index[k]].save_weights('../models/model_TOP'+str(k+1)+'.h5')
   print("Saved models to disk")
 
 # Find neural network config for Top 10
-def find_top10config(score, top10, u_acti, w_init, b_init):
-  table = PrettyTable(['Top', 'u1', 'w1', 'w2', 'b', 'MSE'])
+def find_top10config(score, top10, hidd_nodes, u_hidd, u_out, w_init, b_init):
+  table = PrettyTable(['Top', str(nodes), 'u1', 'u2', 'w1', 'w2', 'b', 'MSE'])
   k=0
   # Find neural network config for Top 10
   for k in range(10):
     i=0
     #in All measureed scores
-    for u1 in u_acti:
-      for w1 in w_init:
-        for w2 in w_init:
-          for b in b_init:
-            if score[i]==top10[k] and k < 10:
-              table.add_row([k+1, u1, w1, w2, b, top10[k]])
-            i=i+1
+    for u1 in u_hidd:
+      for u2 in u_out:
+        for w1 in w_init:
+          for w2 in w_init:
+            for b in b_init:
+              for nodes in hidd_nodes:
+                if score[i]==top10[k] and k < 10:
+                  table.add_row([k+1, nodes, u1, u2, w1, w2, b, top10[k]])
+                i=i+1
   return table
 
 # Save TOP10 on a .txt file
@@ -202,47 +204,49 @@ def main():
   #
 
   # TESTING: 3u1 x 1xu2 x 3w1 x 3w2 x 3b = 81 Networks
+  #          2u1 x 2xu2 x 3w1 x 3w2 x 3b x nodes = 540 Networks (108 networks)
   # Hidden node activation function
-  u_acti = ['tanh','relu','leaky_relu']
+  u_hidd = ['relu','leaky_relu'] # 'tanh'
   # Output node activation function
-  u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
+  u_out = ['relu','leaky_relu'] # better: leaky_relu > relu > linear > selu > elu
   # Initial weights - TOP sets (Test4)
   w_init = ['truncated_normal','VarianceScaling','lecun_uniform']
   # Initial bias - TOP sets (Test4)
   b_init = ['zeros','random_uniform','random_normal']
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  #hidden_nodes = range(1,21) #0-20
-  nodes = 20
+  hidd_nodes = range(15,21) #0-20
+  #nodes = 19
   epochs = 1000 # 1000 epochs Matlab default != iterations
   model = []
   train_history = []
   net_score = []
   i=1
   # Analyses MSE for 6^(possible) config's of networks
-  for u1 in u_acti:
-    for w1 in w_init:
-      for w2 in w_init:
-        for b in b_init:
-          #for nodes in hidden_nodes:
+  for u1 in u_hidd:
+    for u2 in u_out:
+      for w1 in w_init:
+        for w2 in w_init:
+          for b in b_init:
+            for nodes in hidd_nodes:
 
-            model.append(build_network(nodes, u1, u2, w1, w2, b))
-            #train_history.append(train_network(model, X_train, y_train))
-            train_network(model[i-1], X_train, y_train, epochs)
-            net_score.append(evaluate_network(model[i-1], X_test, y_test))
+              model.append(build_network(nodes, u1, u2, w1, w2, b))
+              #train_history.append(train_network(model, X_train, y_train))
+              train_network(model[i-1], X_train, y_train, epochs)
+              net_score.append(evaluate_network(model[i-1], X_test, y_test))
 
-            # Debug
-            print "Model: ", u1, w1, w2, b, nodes
-            print("Progress: %.2f%%" % (i/float(len(u_acti)
+              # Debug
+              print "Model: ", nodes, u1, u2, w1, w2, b
+              print("Progress: %.2f%%" % (i/float(len(u_hidd)*len(u_out)
                                      *len(w_init)*len(w_init)*len(b_init)*1)*100))
-            #print(model.summary())
-            #print(model.layers())
-            i=i+1
+              #print(model.summary())
+              #print(model.layers())
+              i=i+1
 
 
   top10, _index = find_top10score(net_score)
   save_top10_models(model, _index)
-  table = find_top10config(net_score, top10, u_acti, w_init, b_init)
+  table = find_top10config(net_score, top10, hidd_nodes, u_hidd, u_out, w_init, b_init)
   save_top10(table)
   #save_top10plot(history, _index)
 
