@@ -34,54 +34,65 @@ def prepare_data():
   y = dataset[:,5]
   return X, y
 
-# ELM - acho que tens que iniciar assim, nao?
-def setWeights(model):
-		weights = model.layers[-1].get_weights()
-		weights[0] = numpy.random.random_sample((weights[0].shape[0],weights[0].shape[1]))
-		model.layers[-1].set_weights(weights)
-
 # Define the advanced model: 5 inputs -> [ N ] -> 1 output
-def build_network(hidden_nodes, u1, u2):
+def build_network(hidden_nodes, deep_layers, u1, u2, w1, w2, b):
   # Create model
   model = Sequential()
 
-  #Input Variables: Input Layer, Hidden Layer            FALTA: trainable=False ?
+  #Input Variables: Input Layer, Hidden Layer
   if u1=='leaky_relu':
-    model.add(Dense(hidden_nodes, input_dim=5, use_bias=False, trainable=False ))
-    setWeights(model) # FALTA ISTO NAO?
+    model.add(Dense(hidden_nodes, input_dim=5,
+                      kernel_initializer=w1, bias_initializer=b,
+                      use_bias=True ))
     # add an advanced activation
     model.add(LeakyReLU(alpha=0.01)) #BEST: 0.01
   else:
     model.add(Dense(hidden_nodes, input_dim=5,
-                    activation=u1, use_bias=False, trainable=False ))
-    setWeights(model) # FALTA ISTO NAO?
+                    activation=u1, kernel_initializer=w1, bias_initializer=b,
+                    use_bias=True ))
+
+  # Deep Hidden Layers
+  for value in range(deep_layers):
+    if u1=='leaky_relu':
+      model.add(Dense(hidden_nodes,
+                        kernel_initializer=w1, bias_initializer=b,
+                        use_bias=True ))
+      # add an advanced activation
+      model.add(LeakyReLU(alpha=0.01)) #BEST: 0.01
+    else:
+      model.add(Dense(30,
+                      activation='tanh', kernel_initializer=w1, bias_initializer=b,
+                      use_bias=True ))
 
   # Output layer: Output Variable
   if u2=='leaky_relu':
-    model.add(Dense(1, use_bias=False ))
+    model.add(Dense(1,
+                    kernel_initializer=w2, bias_initializer=b,
+                    use_bias=True ))
     # add an advanced activation
     model.add(LeakyReLU(alpha=0.00)) # BEST: 0.00
   else:
     model.add(Dense(1,
-                    activation=u2, use_bias=False ))
+                    activation=u2, kernel_initializer=w2, bias_initializer=b,
+                    use_bias=True ))
 
   # Configures the model for a mean squared error regression problem
-  model.compile(loss='mean_squared_error', optimizer='rmsprop')
-  # sgd, adam, rmsprop, adadelta
+  model.compile(loss='mean_squared_error', optimizer='adam')
+  # rmsprop > adam > sgd > adadelta
   return model
 
 # Network training
 def train_network(model, X_train, y_train, iter):
   # Trains the model for a given number of epochs (iterations on a dataset)
   history = model.fit(X_train, y_train, validation_split=0.10,
-                      epochs=iter, batch_size=32, verbose=0) #shuffle=False,
+                      epochs=iter, batch_size=32, verbose=1) #shuffle=False,
   return history
 
 # Evaluate Network Mean Squared Error
 def evaluate_network(model, X_test, y_test):
   # Evaluate the model: Mean Squared Error (MSE)
   score = model.evaluate(X_test, y_test, batch_size=32)
-  print ('MSE: ' + str(score))
+  print 'MSE: ' + str(score)
   return score
 
 # Find Top 10 Score
@@ -101,38 +112,43 @@ def save_top10_models(model, _index):
   for k in range(10):
     # serialize model to JSON
     model_json = model[_index[k]].to_json()
-    with open('../models/elm/elm_model_TOP'+str(k+1)+'.json', "w") as json_file:
+    with open('../models/model_TOP'+str(k+1)+'.json', "w") as json_file:
       json_file.write(model_json)
-    # serialize weights to HDF5
-    model[_index[k]].save_weights('../models/elm/elm_model_TOP'+str(k+1)+'.h5')
+      # serialize weights to HDF5
+    model[_index[k]].save_weights('../models/model_TOP'+str(k+1)+'.h5')
   print("Saved models to disk")
 
 # Find neural network config for Top 10
-def find_top10config(score, top10, hidd_nodes, u_hidd, u_out):
-  table = PrettyTable(['TOP','Nodes','u1','u2','MSE'])
+def find_top10config(score, top10, hidd_nodes, u_hidd, u_out, w_init, b_init):
+  table = PrettyTable(['TOP','Nodes','u1','u2','w1','w2','b','MSE'])
   k=0
+  # Find neural network config for Top 10
   for k in range(10):
     i=0
     #in All measureed scores
     for u1 in u_hidd:
       for u2 in u_out:
-        for nodes in hidd_nodes:
-          if score[i]==top10[k] and k < 10:
-            table.add_row([k+1, nodes, u1, u2, top10[k]])
-          i=i+1
+        for w1 in w_init:
+          for w2 in w_init:
+            for b in b_init:
+              #for nodes in hidd_nodes:
+                if score[i]==top10[k] and k < 10:
+                                    # hidd_
+                  table.add_row([k+1, hidd_nodes, u1, u2, w1, w2, b, top10[k]])
+                i=i+1
   return table
 
 # Save TOP10 on a .txt file
 def save_top10(table):
-  print ("\nSaving TOP 10 table...")
+  print "\nSaving TOP 10 table..."
   data = table.get_string()
-  with open('../data/elm_TOP10_TABLE.txt', 'wb') as f:
+  with open('../data/TOP10_TABLE.txt', 'wb') as f:
     f.write(data)
-  print (table)
+  print table
 
 # Save TOP10 plots on a .png file
 def save_top10plot(history, _index):
-  print ("\nSaving TOP 10 MSE plots...")
+  print "\nSaving TOP 10 MSE plots..."
   for k in range(10):
     # Plot training & validation loss values
     plt.plot(history[_index[k]].history['loss'])
@@ -146,7 +162,7 @@ def save_top10plot(history, _index):
     # # Set x logaritmic
     # ax.set_yscale('log')
     #plt.show()
-    plt.savefig('../imgs/elm/elm_TOP'+str(k+1)+'_ab.png')
+    plt.savefig('../imgs/ab/TOP'+str(k+1)+'_ab.png')
 
 
 # --------------------------------- MAIN ---------------------------------------
@@ -201,42 +217,103 @@ def main():
   # - https://en.wikipedia.org/wiki/Activation_function
   #
 
-  # TESTING: 2u1 x 2xu2 x 5nodes = 20 Networks
+  # TESTING: 3u1 x 1xu2 x 3w1 x 3w2 x 3b = 81 Networks
+  #          2u1 x 2xu2 x 3w1 x 3w2 x 3b x nodes = 540 Networks (108 networks)
   # Hidden node activation function
-  u_hidd = ['relu','leaky_relu'] # 'tanh'
+  # u_hidd = ['relu','leaky_relu'] # 'tanh'
+  # # Output node activation function
+  # u_out = ['relu','leaky_relu'] # better: leaky_relu > relu > linear > selu > elu
+  # # Initial weights - TOP sets (Test4)
+  # w_init = ['truncated_normal','VarianceScaling','lecun_uniform']
+  # # Initial bias - TOP sets (Test4)
+  # b_init = ['zeros','random_uniform','random_normal']
+
+
+  ######################## TESTE
+  # Hidden node activation function
+  u1 = 'relu'
   # Output node activation function
-  u_out = ['relu','leaky_relu'] # better: leaky_relu > relu > linear > selu > elu
+  u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
+  # Initial weights - TOP sets (Test4)
+  w1 = 'lecun_uniform' # TOP: lecun_uniform GOOD: random_normal,
+  # Initial weights - TOP sets (Test4)
+  w2 = 'VarianceScaling' # TOP: VarianceScaling GOOD: random_normal,
+  # Initial bias - TOP sets (Test4)
+  b = 'random_uniform'  # TOP: random_uniform GOOD: random_uniform
+
+
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
   hidd_nodes = range(15,21) #0-20
-  #nodes = 20
-  epochs = 1000 # 1000 epochs Matlab default != iterations
+  nodes = 20
+  deep_layers = 5
+  epochs = 500 # 1000 epochs Matlab default != iterations
   model = []
   train_history = []
   net_score = []
   i=1
   # Analyses MSE for 6^(possible) config's of networks
-  for u1 in u_hidd:
-    for u2 in u_out:
-      for nodes in hidd_nodes:
-        model.append(build_network(nodes, u1, u2))
-        #train_history.append(train_network(model, X_train, y_train))
-        train_network(model[i-1], X_train, y_train, epochs)
-        net_score.append(evaluate_network(model[i-1], X_test, y_test))
-        # Debug
-        print("Model: ", nodes, u1, u2)
-        print("Progress: %.2f%%" % (i/float(len(u_hidd)*len(u_out)
-                                            *len(hidd_nodes))*100))
-        #print(model.summary())
-        #print(model.layers())
-        i=i+1
+  # for u1 in u_hidd:
+  #   for u2 in u_out:
+  #     for w1 in w_init:
+  #       for w2 in w_init:
+  #         for b in b_init:
+            #for nodes in hidd_nodes:
+
+  model.append(build_network(nodes, deep_layers, u1, u2, w1, w2, b))
+  train_history = train_network(model[i-1], X_train, y_train, epochs)
+  #train_network(model[i-1], X_train, y_train, epochs)
+  net_score.append(evaluate_network(model[i-1], X_test, y_test))
+
+  # Debug
+  print "Model: ", nodes, u1, u2, w1, w2, b
+  # print("Progress: %.2f%%" % (i/float(len(u_hidd)*len(u_out)
+  #           *len(w_init)*len(w_init)*len(b_init)
+  #           *len(hidd_nodes))*100))
+            #print(model[i-1].summary())
+            #print(model.layers())
+  i=i+1
 
 
-  top10, _index = find_top10score(net_score)
-  save_top10_models(model, _index)
-  table = find_top10config(net_score, top10, hidd_nodes, u_hidd, u_out)
-  save_top10(table)
+  # top10, _index = find_top10score(net_score)
+  # save_top10_models(model, _index)         # hidd_
+  # table = find_top10config(net_score, top10, nodes, u_hidd, u_out, w_init, b_init)
+  # save_top10(table)
   #save_top10plot(history, _index)
+
+
+  # calculate predictions
+  y_predictions = model[0].predict(X_test)
+
+  print "\nSaving TOP1 Desired vs Predection plot..."
+  # Plot desired values vs predictions
+  plt.plot(y_test)
+  plt.plot(y_predictions)
+  plt.title('Desired vs Predection')
+  plt.ylabel('y')
+  plt.xlabel('X_test')
+  plt.legend(['Desired', 'Predections'], loc='upper right')
+  # ax = plt.gca()
+  # Set x logaritmic
+  # ax.set_yscale('log')
+  plt.show()
+  #plt.savefig('../imgs/predictions_TOP1.png')
+
+
+
+  # Plot training & validation loss values
+  plt.plot(train_history.history['loss'])
+  # Validation set
+  plt.plot(train_history.history['val_loss'])
+  plt.title('Model loss')
+  plt.ylabel('Loss')
+  plt.xlabel('Epoch')
+  plt.legend(['Train', 'Test'], loc='upper right')
+  # ax = plt.gca()
+  # Set x logaritmic
+  # ax.set_yscale('log')
+  plt.show()
+  #plt.savefig('../imgs/TOP1_MSE.png')
 
 
 if __name__== "__main__":

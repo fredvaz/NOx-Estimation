@@ -107,7 +107,7 @@ def save_top10_models(model, _index):
 
 # Find neural network config for Top 10
 def find_top10config(score, top10, hidd_nodes, u_hidd, u_out, w_init, b_init):
-  table = PrettyTable(['Top', str(nodes), 'u1', 'u2', 'w1', 'w2', 'b', 'MSE'])
+  table = PrettyTable(['TOP','Nodes','u1','u2','w1','w2','b','MSE'])
   k=0
   # Find neural network config for Top 10
   for k in range(10):
@@ -215,7 +215,7 @@ def main():
   b_init = ['zeros','random_uniform','random_normal']
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  hidd_nodes = range(15,21) #0-20
+  hidd_nodes = range(10,15) #0-20, range(15,21), range(10,15)
   #nodes = 19
   epochs = 1000 # 1000 epochs Matlab default != iterations
   model = []
@@ -238,7 +238,8 @@ def main():
               # Debug
               print "Model: ", nodes, u1, u2, w1, w2, b
               print("Progress: %.2f%%" % (i/float(len(u_hidd)*len(u_out)
-                                     *len(w_init)*len(w_init)*len(b_init)*1)*100))
+                                         *len(w_init)*len(w_init)*len(b_init)
+                                         *len(hidd_nodes))*100))
               #print(model.summary())
               #print(model.layers())
               i=i+1
