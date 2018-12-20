@@ -120,14 +120,14 @@ def main():
     y_predictions = numpy.hstack([y_predictions, _y])
   # Score Mean TOP10
   net_score_mean = numpy.mean(net_score)
-  print '\n\nTEST MSE MEAN: ' + str(net_score_mean) +'\n\n'
+  print '\n\nTEST MSE MEAN: ' + str(net_score_mean) +'\n'
   # Desired vs Predection TOP10 Mean
   y_predictions_mean = y_predictions.mean(axis=1) # to take the mean of each row
 
   # Plot Mean
   save_plot_mean_test_predection(y_test, y_predictions_mean, 'test_mean', k)
 
-  print 'Mean Time Test: ', numpy.mean(time_elapsed_test)
+  print 'Mean Time Test: '+str(numpy.mean(time_elapsed_test))+'\n\n'
 
 
   # ------------------------------- TRAIN --------------------------------------
@@ -137,7 +137,7 @@ def main():
   y_predictions = numpy.full((len(y_train),0),0)
   # dataset = dataset treino:
   for k in range(0,10):
-    model = load_top10_models(k, 'test_100_epochs')
+    model = load_top10_models(k, 'test_1000_epochs')
     # Configures the model for a mean squared error regression problem
     model.compile(loss='mean_squared_error', optimizer='rmsprop')
     #print(model.layers())
@@ -154,14 +154,15 @@ def main():
 
   # Score Mean TOP10
   net_score_mean = numpy.mean(net_score)
-  print '\n\nTRAIN MSE MEAN: ' + str(net_score_mean) +'\n\n'
+  print '\n\nTRAIN MSE MEAN: ' + str(net_score_mean) +'\n'
   # Desired vs Predection TOP10 Mean
   y_predictions_mean = y_predictions.mean(axis=1) # to take the mean of each row
 
   # Plot Mean
   save_plot_mean_test_predection(y_train, y_predictions_mean, 'train_mean', k)
+  #save_plot_mean_test_predection(y_train[1:500], y_predictions_mean[1:500], 'train_mean', k)
 
-  print 'Mean Time Train: ', numpy.mean(time_elapsed_train), '\n\n'
+  print 'Mean Time Train: '+str(numpy.mean(time_elapsed_train))+'\n\n'
 
 
 if __name__== "__main__":

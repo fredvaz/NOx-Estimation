@@ -217,7 +217,7 @@ def main():
   b_init = ['zeros','random_uniform','random_normal']
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
-  hidd_nodes = range(15,18) #0-20, range(15,21), range(10,15)
+  hidd_nodes = range(5,7) #0-20, range(15,21), range(10,15)
   #nodes = 19
   epochs = 1000 # 1000 epochs Matlab default != iterations
   model = []

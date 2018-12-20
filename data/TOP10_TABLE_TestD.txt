@@ -107,14 +107,39 @@
   # optimizer='rmsprop'
   # p/ epochs = 1000
   # nodes = 15-20
-
-
++-----+-------+------------+------+------------------+------------------+----------------+----------------------+
+| TOP | Nodes |     u1     |  u2  |        w1        |        w2        |       b        |         MSE          |
++-----+-------+------------+------+------------------+------------------+----------------+----------------------+
+|  1  |   20  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_uniform | 0.007611416221003641 |
+|  2  |   19  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_uniform | 0.007826692009852691 |
+|  3  |   19  |    relu    | relu |  lecun_uniform   | truncated_normal | random_normal  | 0.007966495754027908 |
+|  4  |   20  |    relu    | relu | VarianceScaling  |  lecun_uniform   | random_normal  | 0.007987511149522933 |
+|  5  |   19  | leaky_relu | relu |  lecun_uniform   | VarianceScaling  |     zeros      | 0.007994476180862296 |
+|  6  |   18  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_normal  | 0.00799503501673991  |
+|  7  |   18  | leaky_relu | relu | truncated_normal | truncated_normal |     zeros      | 0.008024378671226176 |
+|  8  |   20  |    relu    | relu | VarianceScaling  | truncated_normal | random_uniform | 0.008164520282298327 |
+|  9  |   19  | leaky_relu | relu | truncated_normal | truncated_normal | random_uniform | 0.008236763245341453 |
+|  10 |   19  |    relu    | relu | VarianceScaling  | VarianceScaling  | random_uniform | 0.008283206481825222 |
++-----+-------+------------+------+------------------+------------------+----------------+----------------------+
 
 
   # optimizer='rmsprop'
   # p/ epochs = 1000
   # nodes = 10-15
---->
+  +-----+-------+------------+------+------------------+------------------+----------------+----------------------+
+| TOP | Nodes |     u1     |  u2  |        w1        |        w2        |       b        |         MSE          |
++-----+-------+------------+------+------------------+------------------+----------------+----------------------+
+|  1  |   16  | leaky_relu | relu | VarianceScaling  | VarianceScaling  |     zeros      | 0.006352145631204952 |
+|  2  |   15  | leaky_relu | relu | VarianceScaling  | truncated_normal |     zeros      | 0.006415241406383839 |
+|  3  |   15  | leaky_relu | relu | truncated_normal | truncated_normal |     zeros      | 0.006670793890953064 |
+|  4  |   15  | leaky_relu | relu |  lecun_uniform   | truncated_normal | random_uniform | 0.006729655264114792 |
+|  5  |   17  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_uniform | 0.00674356615848162  |
+|  6  |   15  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_normal  | 0.006874968018382788 |
+|  7  |   17  | leaky_relu | relu |  lecun_uniform   | VarianceScaling  |     zeros      | 0.006915792678906159 |
+|  8  |   17  | leaky_relu | relu | truncated_normal | VarianceScaling  |     zeros      | 0.006920477485453541 |
+|  9  |   17  | leaky_relu | relu |  lecun_uniform   | VarianceScaling  | random_uniform | 0.006991746234284206 |
+|  10 |   16  | leaky_relu | relu | truncated_normal |  lecun_uniform   | random_uniform | 0.007014299658211795 |
++-----+-------+------------+------+------------------+------------------+----------------+----------------------+
 
 
   # optimizer='rmsprop'

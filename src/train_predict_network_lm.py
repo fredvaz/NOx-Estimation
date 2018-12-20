@@ -98,7 +98,7 @@ def save_plot_test_predection(y_test, y_predictions):
   # Set x logaritmic
   # ax.set_yscale('log')
   plt.show()
-  plt.savefig('../imgs/predictions_TOP1.png')
+  #plt.savefig('../imgs/predictions_TOP1.png')
 
 # Save TOP1 plot on a .png file
 def save_mse_plot(history):
@@ -116,7 +116,7 @@ def save_mse_plot(history):
   # Set x logaritmic
   # ax.set_yscale('log')
   plt.show()
-  plt.savefig('../imgs/TOP1_MSE.png')
+  #plt.savefig('../imgs/TOP1_MSE.png')
 
 
 
@@ -135,7 +135,7 @@ def main():
   # --------------------------- Paramenters ------------------------------------
 
   # Hidden node activation function
-  u1 = 'leaky_relu'
+  u1 = 'sigmoid'
   # Output node activation function
   u2 = 'relu' # better: leaky_relu > relu > linear > selu > elu
   # Initial weights - TOP sets (Test4)
@@ -147,13 +147,15 @@ def main():
 
   # Create a Sequential model: [6 input] -> [12 neurons] -> [1 output]
   nodes = 20
-  epochs = 1000 # 1000 epochs Matlab default != iterations
+  epochs = 2000 # 1000 epochs Matlab default != iterations
   batch = 32 # batch size
 
   model = build_network(nodes, u1, u2, w1, w2, b)
+
   time_start_train = time.clock()
   train_history = train_network(model, X_train, y_train, epochs, batch)
   time_elapsed_train = time.clock() - time_start_train
+
   time_start_test = time.clock()
   net_score = evaluate_network(model, X_test, y_test, batch)
   time_elapsed_test = time.clock() - time_start_test
@@ -161,11 +163,11 @@ def main():
   #print(model.layers())
 
   # calculate predictions
-  y_predictions = model.predict(X_test)
+  y_predictions = model.predict(X_train)
   #accuracy = numpy.mean(predictions == Y)
 
   print '\n\nMSE: ' + str(net_score)
-  save_plot_test_predection(y_test, y_predictions)
+  save_plot_test_predection(y_train[1:300], y_predictions[1:300])
   save_mse_plot(train_history)
 
   print 'Train Time: ', time_elapsed_train

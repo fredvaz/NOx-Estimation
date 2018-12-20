@@ -1,14 +1,14 @@
 +-----+-------+------------+------+------------------+------------------+----------------+----------------------+
 | TOP | Nodes |     u1     |  u2  |        w1        |        w2        |       b        |         MSE          |
 +-----+-------+------------+------+------------------+------------------+----------------+----------------------+
-|  1  |   20  | leaky_relu | relu | VarianceScaling  | VarianceScaling  | random_uniform | 0.011048957536166365 |
-|  2  |   20  | leaky_relu | relu | truncated_normal | VarianceScaling  | random_uniform | 0.01193240261213346  |
-|  3  |   20  | leaky_relu | relu | VarianceScaling  |  lecun_uniform   | random_uniform | 0.01207375777038661  |
-|  4  |   20  | leaky_relu | relu | truncated_normal |  lecun_uniform   | random_uniform | 0.012100271812894128 |
-|  5  |   20  | leaky_relu | relu | VarianceScaling  | truncated_normal | random_uniform | 0.012103149430318313 |
-|  6  |   20  |    relu    | relu | truncated_normal |  lecun_uniform   | random_uniform | 0.012207036973400549 |
-|  7  |   20  | leaky_relu | relu | truncated_normal |  lecun_uniform   | random_normal  | 0.012390018525448713 |
-|  8  |   20  |    relu    | relu | truncated_normal | truncated_normal | random_normal  | 0.01248522444882176  |
-|  9  |   20  |    relu    | relu | truncated_normal | VarianceScaling  | random_normal  | 0.012545934387228706 |
-|  10 |   20  |    relu    | relu | truncated_normal | VarianceScaling  | random_uniform | 0.012700477547266267 |
+|  1  |   6   | leaky_relu | relu | VarianceScaling  |  lecun_uniform   |     zeros      | 0.007274090041491118 |
+|  2  |   6   | leaky_relu | relu | truncated_normal | truncated_normal |     zeros      | 0.007377374900335615 |
+|  3  |   6   | leaky_relu | relu | truncated_normal |  lecun_uniform   |     zeros      | 0.007557312720878557 |
+|  4  |   6   | leaky_relu | relu | truncated_normal |  lecun_uniform   | random_uniform | 0.007586301372132518 |
+|  5  |   5   | leaky_relu | relu | truncated_normal |  lecun_uniform   |     zeros      | 0.007604482278905132 |
+|  6  |   6   |    relu    | relu | truncated_normal | truncated_normal |     zeros      | 0.007658905552869493 |
+|  7  |   5   | leaky_relu | relu | truncated_normal | truncated_normal | random_uniform | 0.007773599451915784 |
+|  8  |   5   |    relu    | relu |  lecun_uniform   | VarianceScaling  |     zeros      | 0.00783854853361845  |
+|  9  |   6   |    relu    | relu | truncated_normal |  lecun_uniform   | random_normal  | 0.007840889709239657 |
+|  10 |   5   |    relu    | relu | VarianceScaling  | truncated_normal | random_uniform | 0.00787139254706827  |
 +-----+-------+------------+------+------------------+------------------+----------------+----------------------+
